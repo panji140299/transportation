@@ -1,6 +1,8 @@
 package com.hacktiv8.auth.model.user;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -27,9 +29,11 @@ public class User {
 	@NotNull
 	private String mobileNumber;
 
-	@ManyToOne
-	@JoinColumn(name = "roles", nullable = false)
-	private Role roles;
+	 @ManyToMany(fetch = FetchType.LAZY)
+	  @JoinTable(  name = "user_roles", 
+	        joinColumns = @JoinColumn(name = "user_id"), 
+	        inverseJoinColumns = @JoinColumn(name = "role_id"))
+	  private Set<Role> roles = new HashSet<>();
 
 	@OneToMany(mappedBy = "owner", cascade = CascadeType.ALL)
 	private List<Agency> agencys;
@@ -48,7 +52,6 @@ public class User {
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.mobileNumber = mobileNumber;
-		this.roles = roles;
 	}
 
 	public Long getId() {
@@ -99,14 +102,6 @@ public class User {
 		this.mobileNumber = mobileNumber;
 	}
 
-	public Role getRoles() {
-		return this.roles;
-	}
-
-	public void setRoles(Role roles) {
-		this.roles = roles;
-	}
-
 	public User id(Long id) {
 		setId(id);
 		return this;
@@ -137,8 +132,46 @@ public class User {
 		return this;
 	}
 
-	public User roles(Role roles) {
-		setRoles(roles);
-		return this;
+	/**
+	 * @return the roles
+	 */
+	public Set<Role> getRoles() {
+		return roles;
 	}
+
+	/**
+	 * @param roles the roles to set
+	 */
+	public void setRoles(Set<Role> roles) {
+		this.roles = roles;
+	}
+
+	/**
+	 * @return the agencys
+	 */
+	public List<Agency> getAgencys() {
+		return agencys;
+	}
+
+	/**
+	 * @param agencys the agencys to set
+	 */
+	public void setAgencys(List<Agency> agencys) {
+		this.agencys = agencys;
+	}
+
+	/**
+	 * @return the tickets
+	 */
+	public List<Ticket> getTickets() {
+		return tickets;
+	}
+
+	/**
+	 * @param tickets the tickets to set
+	 */
+	public void setTickets(List<Ticket> tickets) {
+		this.tickets = tickets;
+	}
+	
 }
