@@ -7,6 +7,7 @@ import java.util.Set;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.hacktiv8.transportation.models.ERole;
@@ -34,7 +36,7 @@ import com.hacktiv8.transportation.repository.UserRepository;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
-@RequestMapping("/api/test")
+@RequestMapping("/api/v1")
 public class TestController {
 	
 	@Autowired
@@ -58,21 +60,25 @@ public class TestController {
   }
 
   @GetMapping("/user")
-  @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
+  @PreAuthorize("hasAuthority('PASSENGER') or hasAuthority('ADMIN')")
   public String userAccess() {
     return "User Content.";
   }
 
   @GetMapping("/admin")
-  @PreAuthorize("hasRole('ADMIN')")
+  @PreAuthorize("hasAuthority('ADMIN')")
   public String adminAccess() {
     return "Admin Board.";
   }
   
-  @GetMapping("/reservation/tripsbystops")
-	public List<Trip> getTripbyStop(){
-		return tripRepository.findAll();
-	}
+  @PreAuthorize("hasAuthority('PASSENGER') or hasAuthority('ADMIN')") 
+  @GetMapping("/reservation/tripsbystops") 
+  public ResponseEntity<?> tripsbystops(@RequestBody Trip trip) { 
+      Integer destStop = trip.getDeststop().getId().intValue(); 
+      Integer sourceStop = trip.getSourcestop().getId().intValue(); 
+      List<Trip> byStops = tripRepository.findByStops(destStop, sourceStop); 
+      return ResponseEntity.ok().body(byStops); 
+  }
   
   @GetMapping("/reservation/stops")
 	public List<Stop> getStop(){
@@ -84,23 +90,37 @@ public class TestController {
  		return tripScheduleRepository.findAll();
  	}
   
-  @PostMapping("/reservation/bookticket")
-  public ResponseEntity<?> bookingTicket(@Valid @RequestBody BookTicketRequest bookTicketRequest) {
-
-
-    // Create new user's account
-    Ticket ticket = new Ticket(
-               bookTicketRequest.getSeatNumber(),
-               bookTicketRequest.getCancellable(),
-               bookTicketRequest.getJourneyDate());
-
-    Set<String> strPassenger = bookTicketRequest.getPassenger();
-    Set<Ticket> passenger = new HashSet<>();
-    
-    Set<String> strTripSchedule = bookTicketRequest.getTripSchedule();
-    Set<Ticket> tripSchedule = new HashSet<>();
-    ticketRepository.save(ticket);
-
-    return ResponseEntity.ok(new MessageResponse("Ticket berhaisl dipesan"));
+//  @PreAuthorize("hasAuthority('owner') or hasAuthority('passenger') or hasAuthority('admin')") 
+  @PostMapping("/reservation/bookticket") 
+  public ResponseEntity<?> bookticket(@Valid @RequestBody Ticket ticket) { 
+      User passenger = new User(); 
+      passenger.setId(ticket.getPassenger().getId()); 
+      TripSchedule tripSchedule = new TripSchedule(); 
+      tripSchedule.setId(ticket.getTripschedule().getId()); 
+      List<Ticket> byPassenger = ticketRepository.findByPassenger(passenger); 
+      List<Ticket> byTripSchedule = ticketRepository.findByTripschedule(tripSchedule); 
+      List<Ticket> bySeatNumber = ticketRepository.findBySeatNumber(ticket.getSeatNumber()); 
+      if (!byPassenger.isEmpty() && !byTripSchedule.isEmpty() && !bySeatNumber.isEmpty()) { 
+          return ResponseEntity.status(HttpStatus.NOT_FOUND) 
+                  .body("Id sudah ada"); 
+//          return ResponseEntity.status(HttpStatus.NOT_FOUND) 
+//                  .body("Ticket dengan id passenger = " + ticket.getPassenger().getId() 
+//                          + " dan dengan id trip schedule " + ticket.getTripschedule().getId() 
+//                          + " dan dengan seat number " + ticket.getSeatNumber() + " sudah ada."); 
+      } else { 
+          TripSchedule tripScheduleNew = tripScheduleRepository.findById(ticket.getTripschedule().getId()).get(); 
+          if (tripScheduleNew.getAvailableSeat() > 0) { 
+              tripSchedule.setAvailableSeat(tripScheduleNew.getAvailableSeat() - 1); 
+              tripSchedule.setTripDate(tripScheduleNew.getTripDate()); 
+              tripSchedule.setTicketSold(tripScheduleNew.getTicketSold()); 
+              tripSchedule.setTripDetail(tripScheduleNew.getTripDetail()); 
+              tripScheduleRepository.save(tripSchedule); 
+              ticketRepository.save(ticket); 
+              return ResponseEntity.ok().body(ticket); 
+          } else { 
+              return ResponseEntity.status(HttpStatus.NOT_FOUND) 
+                      .body("Trip Schedule yang anda pilih, sudah tidak tersedia bangkunya."); 
+          } 
+      } 
   }
 }

@@ -13,9 +13,9 @@ public class BookTicketRequest {
   @Size(max = 50)
   private String journeyDate;
   
-  private Set<String> passenger;
+  private Long passenger;
   
-  private Set<String> tripSchedule;
+  private Long tripSchedule;
 
 /**
  * @return the seatNumber
@@ -62,31 +62,32 @@ public void setJourneyDate(String journeyDate) {
 /**
  * @return the passenger
  */
-public Set<String> getPassenger() {
+public Long getPassenger() {
 	return passenger;
 }
 
 /**
  * @param passenger the passenger to set
  */
-public void setPassenger(Set<String> passenger) {
+public void setPassenger(Long passenger) {
 	this.passenger = passenger;
 }
 
 /**
  * @return the tripSchedule
  */
-public Set<String> getTripSchedule() {
+public Long getTripSchedule() {
 	return tripSchedule;
 }
 
 /**
  * @param tripSchedule the tripSchedule to set
  */
-public void setTripSchedule(Set<String> tripSchedule) {
+public void setTripSchedule(Long tripSchedule) {
 	this.tripSchedule = tripSchedule;
 }
-  
+
+
   
   
 }

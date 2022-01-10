@@ -104,18 +104,18 @@ public class Trip {
 	public void setAgency(Agency agency) {
 		this.agency = agency;
 	}
-	/**
-	 * @return the tripSchedule
-	 */
-	public List<TripSchedule> getTripSchedule() {
-		return tripSchedule;
-	}
-	/**
-	 * @param tripSchedule the tripSchedule to set
-	 */
-	public void setTripSchedule(List<TripSchedule> tripSchedule) {
-		this.tripSchedule = tripSchedule;
-	}
+//	/**
+//	 * @return the tripSchedule
+//	 */
+//	public List<TripSchedule> getTripSchedule() {
+//		return tripSchedule;
+//	}
+//	/**
+//	 * @param tripSchedule the tripSchedule to set
+//	 */
+//	public void setTripSchedule(List<TripSchedule> tripSchedule) {
+//		this.tripSchedule = tripSchedule;
+//	}
 	/**
 	 * @return the sourceStop
 	 */

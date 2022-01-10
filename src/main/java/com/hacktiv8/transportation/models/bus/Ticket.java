@@ -20,7 +20,7 @@ public class Ticket {
 	@JoinColumn
 	private User passenger;
     
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn
 	private TripSchedule tripschedule;
     
@@ -28,10 +28,12 @@ public class Ticket {
 	public Ticket() {
 		// TODO Auto-generated constructor stub
 	}
-	public Ticket(Integer seatNumber, boolean cancellable, String journeyDate) {
+	public Ticket(Integer seatNumber, boolean cancellable, String journeyDate, User passenger, TripSchedule tripSchedule ) {
 		this.seatNumber = seatNumber;
 		this.cancellable = cancellable;
 		this.journeyDate = journeyDate;
+		this.passenger = passenger;
+		this.tripschedule = tripSchedule;
 	}
 	/**
 	 * @return the id

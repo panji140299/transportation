@@ -99,22 +99,22 @@ public class Bus {
 	public Agency getAgency() {
 		return agency;
 	}
-	/**
-	 * @return the user
-	 */
-	/**
-	 * @return the trip
-	 */
-	public List<Trip> getTrip() {
-		return trip;
-	}
-	/**
-	 * @param trip the trip to set
-	 */
-	public void setTrip(List<Trip> trip) {
-		this.trip = trip;
-	}
-	
+//	/**
+//	 * @return the user
+//	 */
+//	/**
+//	 * @return the trip
+//	 */
+//	public List<Trip> getTrip() {
+//		return trip;
+//	}
+//	/**
+//	 * @param trip the trip to set
+//	 */
+//	public void setTrip(List<Trip> trip) {
+//		this.trip = trip;
+//	}
+//	
 
 
 	

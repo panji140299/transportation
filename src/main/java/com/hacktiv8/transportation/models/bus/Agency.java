@@ -87,18 +87,18 @@ public class Agency {
 	public void setDetails(String details) {
 		this.details = details;
 	}
-	/**
-	 * @return the buss
-	 */
-	public List<Bus> getBuss() {
-		return buss;
-	}
-	/**
-	 * @param buss the buss to set
-	 */
-	public void setBuss(List<Bus> buss) {
-		this.buss = buss;
-	}
+//	/**
+//	 * @return the buss
+//	 */
+//	public List<Bus> getBuss() {
+//		return buss;
+//	}
+//	/**
+//	 * @param buss the buss to set
+//	 */
+//	public void setBuss(List<Bus> buss) {
+//		this.buss = buss;
+//	}
 	/**
 	 * @return the user
 	 */
@@ -114,18 +114,18 @@ public class Agency {
 	public void setOwner(User owner) {
 		this.owner = owner;
 	}
-	/**
-	 * @return the trip
-	 */
-	public List<Trip> getTrip() {
-		return trip;
-	}
-	/**
-	 * @param trip the trip to set
-	 */
-	public void setTrip(List<Trip> trip) {
-		this.trip = trip;
-	}
+//	/**
+//	 * @return the trip
+//	 */
+//	public List<Trip> getTrip() {
+//		return trip;
+//	}
+//	/**
+//	 * @param trip the trip to set
+//	 */
+//	public void setTrip(List<Trip> trip) {
+//		this.trip = trip;
+//	}
 
 	
 	

@@ -13,6 +13,7 @@ public class TripSchedule {
     private int fare;
     private String tripDate;
     private int availableSeat;
+    private String tripDetail;
     private String ticketSold;
     
     @ManyToOne
@@ -25,7 +26,26 @@ public class TripSchedule {
     		)
     private List<Ticket> ticket;
     
+    public TripSchedule() {
+    	
+    }
     
+    
+    
+	public TripSchedule(Long id, int fare, String tripDate, int availableSeat, String tripDetail, String ticketSold,
+			Trip trip) {
+		super();
+		this.id = id;
+		this.fare = fare;
+		this.tripDate = tripDate;
+		this.availableSeat = availableSeat;
+		this.tripDetail = tripDetail;
+		this.ticketSold = ticketSold;
+		this.trip = trip;
+	}
+
+
+
 	/**
 	 * @return the id
 	 */
@@ -99,19 +119,31 @@ public class TripSchedule {
 	public void setTrip(Trip trip) {
 		this.trip = trip;
 	}
+//	/**
+//	 * @return the ticket
+//	 */
+//	public List<Ticket> getTicket() {
+//		return ticket;
+//	}
+//	/**
+//	 * @param ticket the ticket to set
+//	 */
+//	public void setTicket(List<Ticket> ticket) {
+//		this.ticket = ticket;
+//	}
+//	
 	/**
-	 * @return the ticket
+	 * @return the tripDetail
 	 */
-	public List<Ticket> getTicket() {
-		return ticket;
+	public String getTripDetail() {
+		return tripDetail;
 	}
 	/**
-	 * @param ticket the ticket to set
+	 * @param tripDetail the tripDetail to set
 	 */
-	public void setTicket(List<Ticket> ticket) {
-		this.ticket = ticket;
+	public void setTripDetail(String tripDetail) {
+		this.tripDetail = tripDetail;
 	}
-	
     
     
     
