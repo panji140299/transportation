@@ -102,20 +102,19 @@ public class TestController {
       List<Ticket> bySeatNumber = ticketRepository.findBySeatNumber(ticket.getSeatNumber()); 
       if (!byPassenger.isEmpty() && !byTripSchedule.isEmpty() && !bySeatNumber.isEmpty()) { 
           return ResponseEntity.status(HttpStatus.NOT_FOUND) 
-                  .body("Id sudah ada"); 
-//          return ResponseEntity.status(HttpStatus.NOT_FOUND) 
-//                  .body("Ticket dengan id passenger = " + ticket.getPassenger().getId() 
-//                          + " dan dengan id trip schedule " + ticket.getTripschedule().getId() 
-//                          + " dan dengan seat number " + ticket.getSeatNumber() + " sudah ada."); 
+                  .body("Ticket dengan id passenger = " + ticket.getPassenger().getId() 
+                          + " dan dengan id trip schedule " + ticket.getTripschedule().getId() 
+                          + " dan dengan seat number " + ticket.getSeatNumber() + " sudah ada."); 
       } else { 
           TripSchedule tripScheduleNew = tripScheduleRepository.findById(ticket.getTripschedule().getId()).get(); 
           if (tripScheduleNew.getAvailableSeat() > 0) { 
               tripSchedule.setAvailableSeat(tripScheduleNew.getAvailableSeat() - 1); 
-              tripSchedule.setTripDate(tripScheduleNew.getTripDate()); 
-              tripSchedule.setTicketSold(tripScheduleNew.getTicketSold()); 
-              tripSchedule.setTripDetail(tripScheduleNew.getTripDetail()); 
+              tripSchedule.setTicketSold(tripScheduleNew.getTicketSold() + 1); 
+              tripSchedule.setTrip(tripScheduleNew.getTrip()); 
+              tripSchedule.setFare(tripScheduleNew.getFare());
+              tripSchedule.setTripDate(tripScheduleNew.getTripDate());
               tripScheduleRepository.save(tripSchedule); 
-              ticketRepository.save(ticket); 
+              ticketRepository.save(ticket);
               return ResponseEntity.ok().body(ticket); 
           } else { 
               return ResponseEntity.status(HttpStatus.NOT_FOUND) 

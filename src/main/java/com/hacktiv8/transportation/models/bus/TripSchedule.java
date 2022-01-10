@@ -14,7 +14,7 @@ public class TripSchedule {
     private String tripDate;
     private int availableSeat;
     private String tripDetail;
-    private String ticketSold;
+    private int ticketSold;
     
     @ManyToOne
 	@JoinColumn
@@ -32,7 +32,7 @@ public class TripSchedule {
     
     
     
-	public TripSchedule(Long id, int fare, String tripDate, int availableSeat, String tripDetail, String ticketSold,
+	public TripSchedule(Long id, int fare, String tripDate, int availableSeat, String tripDetail, int ticketSold,
 			Trip trip) {
 		super();
 		this.id = id;
@@ -98,13 +98,13 @@ public class TripSchedule {
 	/**
 	 * @return the ticketSold
 	 */
-	public String getTicketSold() {
+	public int getTicketSold() {
 		return ticketSold;
 	}
 	/**
 	 * @param ticketSold the ticketSold to set
 	 */
-	public void setTicketSold(String ticketSold) {
+	public void setTicketSold(int ticketSold) {
 		this.ticketSold = ticketSold;
 	}
 	/**
