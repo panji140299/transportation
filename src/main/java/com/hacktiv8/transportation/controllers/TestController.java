@@ -34,8 +34,15 @@ import com.hacktiv8.transportation.repository.TripRepository;
 import com.hacktiv8.transportation.repository.TripScheduleRepository;
 import com.hacktiv8.transportation.repository.UserRepository;
 
+import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
+
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.security.SecurityScheme;
+
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
+@SecurityScheme(name = "apiAuth", type = SecuritySchemeType.HTTP, scheme = "bearer")
 @RequestMapping("/api/v1")
 public class TestController {
 	
@@ -60,18 +67,22 @@ public class TestController {
   }
 
   @GetMapping("/user")
+  @Operation(description = "Auth API KEY")
+  @SecurityRequirement(name = "apiAuth")
   @PreAuthorize("hasAuthority('PASSENGER') or hasAuthority('ADMIN')")
   public String userAccess() {
     return "User Content.";
   }
 
   @GetMapping("/admin")
+  @Operation(description = "Auth API KEY")
+  @SecurityRequirement(name = "apiAuth")
   @PreAuthorize("hasAuthority('ADMIN')")
   public String adminAccess() {
     return "Admin Board.";
   }
   
-  @PreAuthorize("hasAuthority('PASSENGER') or hasAuthority('ADMIN')") 
+ 
   @GetMapping("/reservation/tripsbystops") 
   public ResponseEntity<?> tripsbystops(@RequestBody Trip trip) { 
       Integer destStop = trip.getDeststop().getId().intValue(); 
@@ -80,7 +91,11 @@ public class TestController {
       return ResponseEntity.ok().body(byStops); 
   }
   
+  
+
   @GetMapping("/reservation/stops")
+  @Operation(description = "Auth API KEY")
+  @SecurityRequirement(name = "apiAuth")
 	public List<Stop> getStop(){
 		return stopRepository.findAll();
 	}
@@ -115,7 +130,7 @@ public class TestController {
               tripSchedule.setTripDate(tripScheduleNew.getTripDate());
               tripScheduleRepository.save(tripSchedule); 
               ticketRepository.save(ticket);
-              return ResponseEntity.ok().body(ticket); 
+              return ResponseEntity.ok().body("Ticket Berhasil di Booking"); 
           } else { 
               return ResponseEntity.status(HttpStatus.NOT_FOUND) 
                       .body("Trip Schedule yang anda pilih, sudah tidak tersedia bangkunya."); 

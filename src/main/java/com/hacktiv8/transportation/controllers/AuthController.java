@@ -38,7 +38,7 @@ import com.hacktiv8.transportation.security.services.UserDetailsImpl;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
-@RequestMapping("/api/auth")
+@RequestMapping("/api")
 public class AuthController {
   @Autowired
   AuthenticationManager authenticationManager;
@@ -55,7 +55,7 @@ public class AuthController {
   @Autowired
   JwtUtils jwtUtils;
 
-  @PostMapping("/login")
+  @PostMapping("/auth")
   public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
 
     Authentication authentication = authenticationManager.authenticate(
@@ -124,7 +124,7 @@ public class AuthController {
     return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
   }
   
-  @PostMapping("/logout")
+  @PostMapping("/auth/logout")
   public String logoutPage(HttpServletRequest request, HttpServletResponse response) {  
       Authentication auth = SecurityContextHolder.getContext().getAuthentication();  
       if (auth != null){      
