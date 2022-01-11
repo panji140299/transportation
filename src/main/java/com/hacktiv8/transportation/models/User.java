@@ -14,7 +14,7 @@ import com.hacktiv8.transportation.models.bus.Ticket;
 
 
 @Entity
-@Table(name = "users", 
+@Table(name = "public.users", 
     uniqueConstraints = { 
       @UniqueConstraint(columnNames = "email") 
     })
