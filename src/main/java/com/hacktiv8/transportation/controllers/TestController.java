@@ -117,6 +117,14 @@ public class TestController {
 	  return userRepository.findAll();   
   }
   
+  @GetMapping("/reservation/getagency")
+  public List<Agency> agency(){
+	  return agencyRepository.findAll();
+  }
+  @GetMapping("/reservation/getbus")
+  public List<Bus> bus(){
+	  return busRepository.findAll();
+  }
 
   
   @GetMapping("/reservation/stops")
@@ -219,6 +227,7 @@ public class TestController {
           } 
       } 
   }
+  
   	@PostMapping("/reservation/agency-add")
 //  	@PreAuthorize("hasAuthority('admin')")
   	public ResponseEntity<?> agencycreate(@Valid @RequestBody AgencyDTO agencyDto){
