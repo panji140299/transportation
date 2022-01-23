@@ -6,7 +6,7 @@ import java.util.stream.Stream;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "public.stop")
+@Table(name = "stop")
 public class Stop {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

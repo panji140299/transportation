@@ -2,6 +2,7 @@ package com.hacktiv8.transportation.controllers;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -18,7 +19,10 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -29,6 +33,7 @@ import com.hacktiv8.transportation.models.Role;
 import com.hacktiv8.transportation.models.User;
 import com.hacktiv8.transportation.payload.request.LoginRequest;
 import com.hacktiv8.transportation.payload.request.SignupRequest;
+import com.hacktiv8.transportation.payload.request.user.UserDto;
 import com.hacktiv8.transportation.payload.response.JwtResponse;
 import com.hacktiv8.transportation.payload.response.MessageResponse;
 import com.hacktiv8.transportation.repository.RoleRepository;
@@ -75,6 +80,30 @@ public class AuthController {
                          userDetails.getUsername(), 
                          roles));
   }
+  @GetMapping("/user/profile/{id}")
+  public User profile (@PathVariable(value = "id") long id){
+	  Optional<User> user = userRepository.findById(id);
+	  User users = user.get();
+	  return users;
+  }
+  @PutMapping("/user/update/{id}")
+  public ResponseEntity<?> updateProfile(@PathVariable(value = "id") long id, @Valid @RequestBody UserDto userDto){
+	  Optional<User> user = userRepository.findById(id);
+	  if (user.isPresent()) {
+		  User updateUser = user.get();
+		  
+		  updateUser.setEmail(userDto.getEmail());
+		  updateUser.setFirstname(userDto.getFirstname());
+		  updateUser.setLastname(userDto.getLastname());
+		  updateUser.setMobilenumber(userDto.getMobilenumber());
+		  updateUser.setPassword(encoder.encode(userDto.getPassword()));
+		  
+		  return ResponseEntity.ok(userRepository.save(updateUser));
+	  } else {
+		  return ResponseEntity.status(404).body("User tidak ditemukan");
+	  }
+	  
+  }
 
   @PostMapping("/user/signup")
   public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signUpRequest) {
@@ -108,8 +137,13 @@ public class AuthController {
           Role adminRole = roleRepository.findByName(ERole.ADMIN)
               .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
           roles.add(adminRole);
-
+        case "owner":
+            Role ownerRole = roleRepository.findByName(ERole.OWNER)
+                .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+            roles.add(ownerRole);
+          
           break;
+          
         default:
           Role userRole = roleRepository.findByName(ERole.PASSENGER)
               .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
@@ -124,6 +158,9 @@ public class AuthController {
     return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
   }
   
+  
+  
+  
   @PostMapping("/auth/logout")
   public String logoutPage(HttpServletRequest request, HttpServletResponse response) {  
       Authentication auth = SecurityContextHolder.getContext().getAuthentication();  
@@ -133,3 +170,4 @@ public class AuthController {
        return "/login";  
    }  
 }
+

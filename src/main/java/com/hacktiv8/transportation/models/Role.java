@@ -3,7 +3,7 @@ package com.hacktiv8.transportation.models;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "public.roles")
+@Table(name = "roles")
 public class Role {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
