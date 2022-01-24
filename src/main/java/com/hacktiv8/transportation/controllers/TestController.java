@@ -32,7 +32,10 @@ import com.hacktiv8.transportation.models.bus.Trip;
 import com.hacktiv8.transportation.models.bus.TripSchedule;
 import com.hacktiv8.transportation.payload.request.BookTicketRequest;
 import com.hacktiv8.transportation.payload.request.SignupRequest;
+import com.hacktiv8.transportation.payload.response.AgencyResp;
+import com.hacktiv8.transportation.payload.response.BusResp;
 import com.hacktiv8.transportation.payload.response.MessageResponse;
+import com.hacktiv8.transportation.payload.response.TripResp;
 import com.hacktiv8.transportation.payload.response.Trip.TripDTO;
 import com.hacktiv8.transportation.payload.response.TripSchedule.TripScheduleDTO;
 import com.hacktiv8.transportation.repository.AgencyRepository;
@@ -125,7 +128,18 @@ public class TestController {
   public List<Bus> bus(){
 	  return busRepository.findAll();
   }
+  @GetMapping("reservation/byrole")
+  public ResponseEntity<?> readByRole(@Valid @RequestParam long roleId) { 
+      Role role = new Role(); 
+      role.setId(roleId); 
+      List<User> byRole = userRepository.findByRoles(role); 
 
+      if (byRole.isEmpty()) { 
+          return ResponseEntity.status(404).body("Daftar User dengan role id = " + roleId + " tidak ditemukan."); 
+      } else { 
+          return ResponseEntity.ok(byRole); 
+      } 
+  }
   
   @GetMapping("/reservation/stops")
 	public List<Stop> getStop(){
@@ -150,14 +164,14 @@ public class TestController {
   @GetMapping("/reservation/trip")
   public ResponseEntity<?> getTrip(){
 	  List<Trip> trips = tripRepository.findAll();
-	  List<TripDTO> tripDto = trips.stream()
-			  .map(t->new TripDTO(
+	  List<TripResp> tripDto = trips.stream()
+			  .map(t->new TripResp(
 					  t.getFare(),
 					  t.getJourneyTime(),
-					  t.getBus().getId(),
-					  t.getAgency().getId(),
-					  t.getSourcestop().getId(),
-					  t.getDeststop().getId()))
+					  t.getBus().getCode(),
+					  t.getAgency().getName(),
+					  t.getSourcestop().getName(),
+					  t.getDeststop().getName()))
 			  .collect(Collectors.toList());
 	  
 	  return ResponseEntity.ok(tripDto);
@@ -166,12 +180,12 @@ public class TestController {
   @GetMapping("/reservation/agency")
   public ResponseEntity<?> getAgency(){
 	  List<Agency> agency = agencyRepository.findAll();
-	  List<AgencyDTO> agencyDto = agency.stream()
-			  .map(t->new AgencyDTO(
+	  List<AgencyResp> agencyDto = agency.stream()
+			  .map(t->new AgencyResp(
 					  t.getCode(),
 					  t.getName(),
 					  t.getDetails(),
-					  t.getOwner().getId()))
+					  t.getOwner().getFirstname()+" "+t.getOwner().getLastname()))
 			  .collect(Collectors.toList());
 	  
 	  return ResponseEntity.ok(agencyDto);
@@ -179,12 +193,12 @@ public class TestController {
   @GetMapping("/reservation/bus")
   public ResponseEntity<?> getBus(){
 	  List<Bus> bus = busRepository.findAll();
-	  List<BusDto> busDto = bus.stream()
-			  .map(t->new BusDto(
+	  List<BusResp> busDto = bus.stream()
+			  .map(t->new BusResp(
 					  t.getCode(),
 					  t.getCapacity(),
 					  t.getMake(),
-					  t.getAgency().getId()))
+					  t.getAgency().getName()))
 			  .collect(Collectors.toList());
 	  
 	  return ResponseEntity.ok(busDto);
