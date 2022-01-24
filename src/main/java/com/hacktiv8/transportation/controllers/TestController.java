@@ -168,10 +168,10 @@ public class TestController {
 			  .map(t->new TripResp(
 					  t.getFare(),
 					  t.getJourneyTime(),
-					  t.getBus().getCode(),
 					  t.getAgency().getName(),
 					  t.getSourcestop().getName(),
-					  t.getDeststop().getName()))
+					  t.getDeststop().getName(),
+					  t.getBus().getCode()))
 			  .collect(Collectors.toList());
 	  
 	  return ResponseEntity.ok(tripDto);
