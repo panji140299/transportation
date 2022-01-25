@@ -6,7 +6,7 @@ import com.hacktiv8.transportation.models.User;
 
 
 @Entity
-@Table(name = "ticket")
+@Table(name = "public.ticket")
 public class Ticket {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

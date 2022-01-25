@@ -18,7 +18,7 @@ import com.hacktiv8.transportation.models.User;
 
 
 
-@Table(name = "agency")
+@Table(name = "public.agency")
 @Entity
 public class Agency {
 	@Id

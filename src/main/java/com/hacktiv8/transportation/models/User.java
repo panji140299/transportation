@@ -14,7 +14,7 @@ import com.hacktiv8.transportation.models.bus.Ticket;
 
 
 @Entity
-@Table(name = "users", 
+@Table(name = "public.users", 
     uniqueConstraints = { 
       @UniqueConstraint(columnNames = "email") 
     })
@@ -45,7 +45,7 @@ public class User {
   private String mobilenumber;
 
   @ManyToMany(fetch = FetchType.LAZY)
-  @JoinTable(  name = "user_roles", 
+  @JoinTable(  name = "public.user_roles", 
         joinColumns = @JoinColumn(name = "user_id"), 
         inverseJoinColumns = @JoinColumn(name = "role_id"))
   private Set<Role> roles = new HashSet<>();
