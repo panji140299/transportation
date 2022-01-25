@@ -140,6 +140,26 @@ public class TestController {
           return ResponseEntity.ok(byRole); 
       } 
   }
+  @GetMapping("reservation/byagency")
+  public ResponseEntity<?> readByAgency(@Valid @RequestParam int agencyId) { 
+	  List<Bus> bus = busRepository.findByAgency(agencyId);
+	  List<BusResp> busDto = bus.stream()
+			  .map(t->new BusResp(
+					  t.getCode(),
+					  t.getCapacity(),
+					  t.getMake(),
+					  t.getAgency().getName()))
+			  .collect(Collectors.toList());
+	  
+	  return ResponseEntity.ok(busDto);
+  }
+  @GetMapping("reservation/bystop")
+  public ResponseEntity<?> readByStop(@Valid @RequestParam int stopid) { 
+	  List<Stop> stop = stopRepository.findStop(stopid);
+	  
+	  return ResponseEntity.ok(stop);
+  }
+  
   
   @GetMapping("/reservation/stops")
 	public List<Stop> getStop(){
