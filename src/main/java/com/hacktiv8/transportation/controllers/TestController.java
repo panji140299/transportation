@@ -145,6 +145,7 @@ public class TestController {
 	  List<Bus> bus = busRepository.findByAgency(agencyId);
 	  List<BusResp> busDto = bus.stream()
 			  .map(t->new BusResp(
+					  t.getId(),
 					  t.getCode(),
 					  t.getCapacity(),
 					  t.getMake(),
@@ -215,6 +216,7 @@ public class TestController {
 	  List<Bus> bus = busRepository.findAll();
 	  List<BusResp> busDto = bus.stream()
 			  .map(t->new BusResp(
+					  t.getId(),
 					  t.getCode(),
 					  t.getCapacity(),
 					  t.getMake(),

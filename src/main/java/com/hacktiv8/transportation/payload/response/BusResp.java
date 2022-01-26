@@ -1,6 +1,7 @@
 package com.hacktiv8.transportation.payload.response;
 
 public class BusResp {
+	private long id;
 	private String code;
 	private String capacity;
 	private String make;
@@ -10,12 +11,27 @@ public class BusResp {
 		
 	}
 
-	public BusResp(String code, String capacity, String make, String agency) {
+	public BusResp(long id, String code, String capacity, String make, String agency) {
 		super();
+		this.id = id;
 		this.code = code;
 		this.capacity = capacity;
 		this.make = make;
 		this.agency = agency;
+	}
+
+	/**
+	 * @return the id
+	 */
+	public long getId() {
+		return id;
+	}
+
+	/**
+	 * @param id the id to set
+	 */
+	public void setId(long id) {
+		this.id = id;
 	}
 
 	/**
@@ -75,4 +91,3 @@ public class BusResp {
 	}
 	
 }
-
